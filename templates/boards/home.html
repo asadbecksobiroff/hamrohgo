@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Welcome to Mini App</h1>
+        <div id="status">Verifying identity...</div>
+        <div id="user-data">
+            <p><strong>Username:</strong> <span id="username">{{ telegram_profile.username }}</span></p>
+            <p><strong>First Name:</strong> <span id="first_name">{{ telegram_profile.first_name }}</span></p>
+            <p><strong>Last Name:</strong> <span id="last_name">{{ telegram_profile.last_name }}</span></p>
+            <p><strong>Telegram ID:</strong> <span id="tg_id">{{ telegram_profile.telegram_id }}</span></p>
+        </div>
+    </div>
+{% endblock content %}

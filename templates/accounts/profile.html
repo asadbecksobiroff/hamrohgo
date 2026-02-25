@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <div class="container my-3">
+        <h1 class="mb-5">Profil ma'lumotlari</h1>
+        {% if not tg_user %}
+        <h3>
+            @{{ user.username }}
+            {% if user.is_superuser %}
+            - Superuser
+            {% elif user.is_staff %}
+            - Admin
+            {% endif %}
+        </h3>
+        {% else %}
+        
+        <div class="card border-0 mb-5" style="max-width: 720px; margin: 0 auto;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <div style="width: 150px; height: 150px; overflow: hidden; margin: 0 auto;">
+                    {% if tg_user.photo_url %}
+                    <img src="{{ tg_user.photo_url }}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                    {% else %}
+                    <img src="{% static 'img/user.png' %}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h1>
+                            @{{ tg_user.username }}
+                            {% if tg_user.role == 'A' %}
+                            <i class="fa-regular fa-circle-check"></i>
+                            {% elif tg_user.role == 'D' %}
+                            <i class="fa-solid fa-taxi"></i>
+                            {% endif %}
+                        </h1>
+                        <p class="mb-0">{{ tg_user.first_name | default_if_none:'' }} {{ tg_user.last_name | default_if_none:'' }}</p>
+                        {% if tg_user.phone %}
+                        <p class="mb-0">{{ tg_user.phone }}</p>
+                        {% endif %}
+                        {% if tg_user.phone %}
+                        <p class="mb-0">{{ tg_user.get_region_display }} viloyati</p>
+                        {% endif %}
+                        {% if tg_user.phone %}
+                        <p class="mb-0">{{ tg_user.city }}</p>
+                        {% endif %}
+                        <div>
+                            <a href="{% url 'profile_update' tg_user.pk %}" class="btn btn-outline-secondary w-100 mt-3">O'zgartirish</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 mb-5" style="max-width: 720px; margin: 0 auto;">
+            <h3 class="mb-4">Mening mashinam</h3>
+            {% if user.car %}
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <div style="width: 150px; height: 150px; overflow: hidden; margin: 0 auto;">
+                    {% if user.car.photo_url %}
+                        <img src="{{ user.car.photo_url.url }}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                    {% else %}
+                        <img src="{% static 'img/car.png' %}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h1>
+                            {{ user.car.brand }} {{ user.car.model }}
+                        </h1>
+                        <p class="mb-0">Davlat raqami: {{ user.car.number  | default_if_none:'Mavjud emas' }}</p>
+                        <p class="mb-0">O'rindiqlar soni: {{ user.car.seats  | default_if_none:'Mavjud emas' }}</p>
+                        <p class="mb-0">Rangi: {{ user.car.color | default_if_none:'Mavjud emas' }}</p>
+                        <p class="mb-0">Avtomobil turi: {{ user.car.get_car_type_display  | default_if_none:'Mavjud emas' }}</p>
+                        <div class="row mt-2 g-2">
+                            <div class="col-lg-6">
+                                <a href="{% url 'car_update' user.car.pk %}" class="btn btn-outline-secondary w-100">O'zgartirish</a>
+                            </div>
+                            <div class="col-lg-6">
+                                <a href="{% url 'car_delete' user.car.pk %}" class="btn btn-outline-danger w-100">O'chirish</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    Sizda mashina mavjud emas.
+                </div>
+                <a href="{% url 'car_create' %}" class="btn btn-outline-secondary w-100 mt-2">Mashina qo'shish</a>
+            {% endif %}
+        </div>
+
+        {% endif %}
+
+    </div>
+{% endblock content %}

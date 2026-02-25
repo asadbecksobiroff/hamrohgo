@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Redirecting...{% endblock title %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1>Tizimga kirish</h1>
+        <div id="status">Ma'lumotlar tekshiriloqda...</div>
+        <p>Asosiy sahifaga yo'naltirilmoqda...</p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        async function authenticate() {
+            const initData = tg.initData;
+
+            try {
+                const response = await fetch("{% url 'auth_telegram' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ initData: initData })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    document.getElementById('status').innerText = 'Muvaffaqiyatli!';
+                    window.location.href = "{% url 'home' %}";
+                } else {
+                    document.getElementById('status').innerText = 'Authentication failed: ' + result.message;
+                }
+            } catch (error) {
+                document.getElementById('status').innerText = 'Error: ' + error.message;
+            }
+        }
+
+        authenticate();
+    </script>
+{% endblock content %}

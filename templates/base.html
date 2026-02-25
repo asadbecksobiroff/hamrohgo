@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hamroh Go - darhol mashina toping va jo'nab keting!{% endblock title %}</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% comment %} <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #user-data {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style> {% endcomment %}
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo" width="24" height="24" class="d-inline-block align-text-bottom">
+                    Hamroh Go
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="#">Mashina topish</a>
+                        <a class="nav-link" href="#">Takliflar</a>
+                        <a class="nav-link" href="{% url 'profile' %}">Profil</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="bd-footer py-4 py-md-5 mt-5 bg-body-tertiary" data-bs-theme="dark">
+            <div class="container py-4 py-md-5 px-4 px-md-3 text-body-secondary">
+                <div class="row d-flex flex-column-reverse flex-lg-row">
+                    <div class="col-lg-6">
+                        <a class="navbar-brand" href="{% url 'home' %}">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo" width="30" height="30" class="d-inline-block align-text-bottom">
+                            <h4 class="d-inline-block ms-1">Hamroh Go</h4>
+                        </a>
+                        <p class="mb-0">Tezkor taksi topish.</p>
+                        <p class="mb-0">Haydovchilar va yo'lovchilar uchun oson yechimlar.</p>
+                        <p>© {% now "Y" %}</p>
+                    </div>
+                    <div class="col-lg-5 offset-lg-1 mb-4 mb-lg-0">
+                        <h5>Havolalar</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a class="nav-link" href="#">Mashina topish</a></li>
+                            <li class="mb-2"><a class="nav-link" href="#">Takliflar</a></li>
+                            <li class="mb-2"><a class="nav-link" href="#">Profil</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </footer>
+
+    <script>
+        // App yuklanganda ishlaydi
+        const tg = window.Telegram.WebApp;
+        const currentUser = tg.initDataUnsafe.user;
+
+        // LocalStorage'da oxirgi kirgan ID ni saqlab qo'yamiz
+        const lastTgId = localStorage.getItem('last_tg_id');
+
+        if (lastTgId && currentUser && lastTgId !== currentUser.id.toString()) {
+            // Akkaunt almashganini aniqladik!
+            console.log("Akkaunt almashdi, kesh tozalanmoqda...");
+            localStorage.clear(); // Tokenlarni o'chirish
+            window.location = "{% url 'auth_telegram_login' %}"; // Sahifani yangilab, qayta login qilishga majburlash
+        }
+
+        if (currentUser) {
+            localStorage.setItem('last_tg_id', currentUser.id.toString());
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+</html>

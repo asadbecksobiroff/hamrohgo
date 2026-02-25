@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Avtomobilni o'chirish{% endblock %}
+
+{% block content %}
+    <div class="container my-3">
+        <h1 class="mb-5">Avtomobilni o'chirish</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Haqiqatan ham avtomobilni o'chirmoqchimisiz?</p>
+            <button type="submit" class="btn btn-danger">O'chirish</button>
+        </form>
+
+    </div>
+{% endblock content %}
