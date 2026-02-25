@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <h1>Faol e'loningiz</h1>
+
+        <div class="row g-3">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="">
+                                <div style="width: 70px; height: 70px; overflow: hidden;">
+                                    {% if board.driver.car.photo_url %}
+                                    <img src="{{ board.driver.car.photo_url.url }}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                                    {% else %}
+                                    <img src="{% static 'img/car.png' %}" alt="profile photo" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle mb-3">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h5 class="card-title ms-2">{{ board.driver.telegram_profile.first_name }} {{ board.driver.telegram_profile.last_name | default:"" }}</h5>
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">
+                            <p class="mb-0">
+                                <i class="fa-solid fa-location-arrow"></i>
+                                {{ board.get_from_region_display }}{{ ", "|add:board.from_city }}
+                            </p>
+                            <p class="my-0">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </p>
+                            <p>
+                                <i class="fa-solid fa-location-dot"></i>
+                                {{ board.get_to_region_display }}{{ ", "|add:board.to_city }}
+                            </p>
+                            <p>
+                                <i class="fa-solid fa-user-group"></i>
+                                {{ board.seats }} ta joy
+                            </p>
+                            <p>
+                                <i class="fa-solid fa-phone"></i>
+                                {{ board.driver.telegram_profile.phone }}
+                            </p>
+                        </h6>
+                        <p class="card-text">{{ board.comment }}</p>
+                        <p class="card-text h5 mb-3">{{ board.price }} so'm</p>
+                        <div class="row mt-2 g-2">
+                            <div class="col-lg-6">
+                                <a href="{% url 'board_update' board.id %}" class="btn btn-outline-secondary w-100">O'zgartirish</a>
+                            </div>
+                            <div class="col-lg-6">
+                                <a href="{% url 'board_delete' board.id %}" class="btn btn-outline-danger w-100">O'chirish</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}
