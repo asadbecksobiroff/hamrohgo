@@ -175,3 +175,28 @@ class CarDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
             return False
         
         return True
+
+
+class ChangeUserRoleView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = TelegramProfile
+    template_name = 'accounts/change_role.html'
+    fields = []
+    success_url = reverse_lazy('car_create')
+
+    def test_func(self):
+        user = self.request.user
+        try:
+            tg_user = user.telegram_profile
+            tg_user_role = tg_user.role
+        except Exception:
+            tg_user_role = None
+            
+        if user.is_staff or tg_user_role in (Roles.DRIVER, Roles.ADMIN):
+            return False
+                
+        return True
+
+    def form_valid(self, form):
+        if self.request.POST:
+            form.instance.role = Roles.DRIVER
+        return super().form_valid(form)

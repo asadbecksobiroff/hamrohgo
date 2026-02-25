@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Haydovchi bo'lish{% endblock %}
+
+{% block content %}
+    <div class="container my-3">
+        <h1 class="mb-5">Haydovchi bo'lish</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Haydovchi bo'lishni xohlaysizmi?</p>
+            <button type="submit" class="btn btn-success">Haydovchi bo'lish</button>
+        </form>
+
+    </div>
+{% endblock content %}
