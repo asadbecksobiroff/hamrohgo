@@ -52,7 +52,8 @@
                                 data-bs-toggle="modal" 
                                 data-bs-target="#exampleModal" 
                                 data-bs-phone="{{ board.driver.telegram_profile.phone }}"
-                                data-bs-telegram="{{ board.driver.telegram_profile.username }}">
+                                data-bs-telegram="{{ board.driver.telegram_profile.username }}"
+                                data-bs-telegram-id="{{ board.driver.telegram_profile.telegram_id }}">
                             <i class="fa-solid fa-phone"></i>
                             Bog'lanish
                         </button>
@@ -74,7 +75,7 @@
                         <p><i class="fa-brands fa-telegram"></i> @<span class="modal-telegram"></span></p>
                     </div>
                         <div class="modal-footer">
-                            <a href="#" class="btn btn-primary modal-tg-url">Telegramdan yozish</a>
+                            <a onclick="sendToBot()" class="btn btn-primary modal-tg-url">Telegramdan yozish</a>
                             <a href="#" class="btn btn-primary modal-phone-url">Qo'ng'iroq qilish</a>
                         </div>
                     </div>
@@ -85,25 +86,48 @@
 
     <script>
         const dynamicModal = document.getElementById('exampleModal');
+        let link;
 
         dynamicModal.addEventListener('show.bs.modal', function (event) {
-        // Modalni ochgan tugmani aniqlaymiz
-        const button = event.relatedTarget;
-        
-        // Tugmadagi data-* atributlaridan ma'lumotni olamiz
-        const user_phone = button.getAttribute('data-bs-phone');
-        const user_telegram = button.getAttribute('data-bs-telegram');
-        
-        // Modal ichidagi elementlarni yangilaymiz
-        const modalPhone = dynamicModal.querySelector('.modal-phone');
-        const modalTelegam = dynamicModal.querySelector('.modal-telegram');
-        const modalPhoneUrl = dynamicModal.querySelector('.modal-phone-url');
-        const modalTelegamUrl = dynamicModal.querySelector('.modal-tg-url');
-        
-        modalPhone.textContent = user_phone;
-        modalTelegam.textContent = user_telegram;
-        modalPhoneUrl.href = `tel:${user_phone}`;
-        modalTelegamUrl.href = `https://t.me/${user_telegram}/`;
+            // Modalni ochgan tugmani aniqlaymiz
+            const button = event.relatedTarget;
+            
+            // Tugmadagi data-* atributlaridan ma'lumotni olamiz
+            const user_phone = button.getAttribute('data-bs-phone');
+            const user_telegram = button.getAttribute('data-bs-telegram');
+            const user_telegram_id = button.getAttribute('data-bs-telegram-id');
+            
+            // alert(user_telegram);
+            // alert(user_telegram_id);
+
+            // Modal ichidagi elementlarni yangilaymiz
+            const modalPhone = dynamicModal.querySelector('.modal-phone');
+            const modalTelegam = dynamicModal.querySelector('.modal-telegram');
+            const modalPhoneUrl = dynamicModal.querySelector('.modal-phone-url');
+            const modalTelegamUrl = dynamicModal.querySelector('.modal-tg-url');
+            
+            modalPhone.textContent = user_phone;
+            modalTelegam.textContent = user_telegram;
+            modalPhoneUrl.href = `tel:${user_phone}`;
+            
+            if (user_telegram != "None") {
+                setLinkWithUsername(user_telegram);
+            } else {
+                setLinkWithId(user_telegram_id);
+            }
         });
+
+        function setLinkWithUsername(profileUsername) {
+            link = `https://t.me/${profileUsername}`;
+        }
+
+        function setLinkWithId(profileId) {
+            const botUsername = "hamroh_go_bot";
+            link = `https://t.me/${botUsername}?start=driver_${profileId}`;
+        }
+
+        function sendToBot() {
+            tg.openTelegramLink(link);
+        }
     </script>
 {% endblock content %}

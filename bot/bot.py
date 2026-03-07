@@ -19,6 +19,20 @@ async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` command
     """
+    args = message.get_args()
+    if args.startswith('driver_'):
+        profile_id = args.split('_')[1]
+        
+        # Django ORM orqali ma'lumotni olish (sync_to_async kerak bo'lishi mumkin)
+        # profile = await get_profile_from_db(profile_id)
+        
+        # MarkdownV2 yoki HTML formatida profilga havola yuborish
+        # Bu yerda tg://user?id= orqali profilga o'tiladi
+        text = f"Haydovchi profili: [Profilni ko'rish](tg://user?id={profile_id})"
+        
+        await message.answer(text, parse_mode="MarkdownV2")
+        return
+
     markup = InlineKeyboardMarkup()
     # Adding a button that opens the Mini App
     webapp_button = InlineKeyboardButton(
@@ -30,7 +44,7 @@ async def send_welcome(message: types.Message):
     await message.reply(
         f"Welcome! Click the button below to open the Mini App.",
         reply_markup=markup
-    )
+    )    
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
